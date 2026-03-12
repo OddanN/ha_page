@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-03-12T22:01:22.753285+00:00",
+  "site": {
+    "title": "OdaN's Projects for Home Assistant",
+    "description": "Витрина репозиториев OddanN по теме Home Assistant и связанных интеграций. Список обновляется автоматически через GitHub Actions.",
+    "description_link_label": "",
+    "description_link_url": "",
+    "acknowledgements": "Спасибо всем, кто тестирует интеграции, присылает багрепорты, предлагает идеи и помогает доводить проекты до рабочего состояния.",
+    "special_thanks": [
+      {
+        "label": "@fuCtor",
+        "url": "https://github.com/fuCtor"
+      },
+      {
+        "label": "@Pamell",
+        "url": "https://github.com/Pamell"
+      }
+    ],
+    "github_profile_url": "https://github.com/OddanN",
+    "source_repository_url": "https://github.com/OddanN/ha_page"
+  },
+  "collection": {
+    "filters": [
+      "topics: home-assistant, hacs, homeassistant",
+      "prefixes: ha_, hass_",
+      "keywords: home assistant, hacs, lovelace, eirc",
+      "exclude: ha_page"
+    ]
+  },
+  "repos": [
+    {
+      "name": "eirc_spb_for_home_assistant",
+      "description": "Интеграция ЕИРЦ СПб для Home Assistant",
+      "html_url": "https://github.com/OddanN/eirc_spb_for_home_assistant",
+      "updated_at": "2026-03-12T20:09:58Z",
+      "language": "Python",
+      "stargazers_count": 1,
+      "topics": [],
+      "fork": false,
+      "archived": false,
+      "featured": false,
+      "latest_release": {
+        "tag_name": "v0.0.1",
+        "html_url": "https://github.com/OddanN/eirc_spb_for_home_assistant/releases/tag/v0.0.1",
+        "published_at": "2026-03-12T19:34:06Z"
+      },
+      "release_badge": {
+        "alt": "GitHub Release",
+        "image_url": "https://img.shields.io/github/v/release/OddanN/eirc_spb_for_home_assistant?style=flat-square",
+        "link_url": ""
+      },
+      "logo_url": "https://raw.githubusercontent.com/OddanN/eirc_spb_for_home_assistant/main/logo.png",
+      "readme_badges": [
+        {
+          "alt": "hacs_badge",
+          "image_url": "https://img.shields.io/badge/HACS-Custom-orange.svg?style=flat-square",
+          "link_url": "https://github.com/hacs/integration"
+        },
+        {
+          "alt": "GitHub Activity",
+          "image_url": "https://img.shields.io/github/commit-activity/m/OddanN/eirc_spb_for_home_assistant?style=flat-square",
+          "link_url": "https://github.com/OddanN/eirc_spb_for_home_assistant/commits/main/"
+        }
+      ]
+    },
+    {
+      "name": "lsr_for_home_assistant",
+      "description": "Интеграция ЛСР для Home Assistant",
+      "html_url": "https://github.com/OddanN/lsr_for_home_assistant",
+      "updated_at": "2026-03-12T20:09:17Z",
+      "language": "Python",
+      "stargazers_count": 1,
+      "topics": [],
+      "fork": false,
+      "archived": false,
+      "featured": false,
+      "latest_release": {
+        "tag_name": "v1.3.0",
+        "html_url": "https://github.com/OddanN/lsr_for_home_assistant/releases/tag/v1.3.0",
+        "published_at": "2026-03-01T22:32:34Z"
+      },
+      "release_badge": {
+        "alt": "GitHub Release",
+        "image_url": "https://img.shields.io/github/v/release/OddanN/lsr_for_home_assistant?style=flat-square",
+        "link_url": ""
+      },
+      "logo_url": "https://raw.githubusercontent.com/OddanN/lsr_for_home_assistant/main/logo.png",
+      "readme_badges": [
+        {
+          "alt": "hacs_badge",
+          "image_url": "https://img.shields.io/badge/HACS-Custom-orange.svg?style=flat-square",
+          "link_url": "https://github.com/hacs/integration"
+        },
+        {
+          "alt": "GitHub Activity",
+          "image_url": "https://img.shields.io/github/commit-activity/m/OddanN/lsr_for_home_assistant?style=flat-square",
+          "link_url": "https://github.com/OddanN/lsr_for_home_assistant/commits/main/"
+        }
+      ]
+    }
+  ]
+}

@@ -3,14 +3,112 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Мои проекты</title>
+  <title>OddanN Projects</title>
+  <meta
+          name="description"
+          content="Коллекция репозиториев OddanN по одной теме с автоматическим обновлением через GitHub API."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+          rel="stylesheet"
+  >
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <h1>Мои проекты</h1>
-  <p>Здесь собраны мои репозитории.</p>
-  <ul>
-    <li><a href="https://github.com/ВАШ_ЛОГИН/РЕПО1">РЕПО1</a></li>
-    <li><a href="https://github.com/ВАШ_ЛОГИН/РЕПО2">РЕПО2</a></li>
-  </ul>
+<div class="page-shell">
+  <header class="hero">
+    <div class="hero-updated">
+      <span class="hero-updated-label">Обновлено</span>
+      <span id="stat-updated" class="hero-updated-value">ожидание</span>
+    </div>
+    <h1 id="site-title">Коллекция репозиториев</h1>
+    <p id="site-description" class="hero-copy">
+      Эта страница собирает проекты по одной теме и обновляет список автоматически.
+    </p>
+
+    <div class="hero-actions-row">
+      <div class="hero-actions">
+        <a id="profile-link" class="button button-primary" href="https://github.com/OddanN" target="_blank"
+           rel="noreferrer">
+          Открыть профиль GitHub
+        </a>
+        <a id="source-link" class="button button-secondary" href="https://github.com/OddanN/ha_page" target="_blank"
+           rel="noreferrer">
+          Исходники страницы
+        </a>
+      </div>
+
+      <dl class="stats" id="stats">
+        <div class="stat-card">
+          <dt>Репозиториев:</dt>
+          <dd id="stat-total">0</dd>
+        </div>
+        <div class="stat-card" id="featured-stat-card">
+          <dt>Избранных:</dt>
+          <dd id="stat-featured">0</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <main class="content">
+    <section id="featured-section" class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Ключевые проекты</h2>
+        </div>
+      </div>
+      <div id="featured-grid" class="repo-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Все найденные репозитории</h2>
+        </div>
+      </div>
+      <div id="filter-chips" class="chips"></div>
+      <div id="repo-grid" class="repo-grid"></div>
+    </section>
+
+    <section class="panel acknowledgements">
+      <div class="panel-heading">
+        <div>
+          <h2>Спасибо за помощь</h2>
+        </div>
+      </div>
+      <p id="acknowledgements-text" class="muted"></p>
+      <div id="acknowledgements-special" class="acknowledgements-special hidden">
+        <p class="acknowledgements-special-title">Отдельное спасибо</p>
+        <div id="acknowledgements-list" class="acknowledgements-list"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<template id="repo-card-template">
+  <article class="repo-card">
+    <div class="repo-card-head">
+      <div class="repo-card-top">
+        <p class="repo-badges"></p>
+        <h3><a class="repo-name" target="_blank" rel="noreferrer"></a></h3>
+        <p class="repo-description"></p>
+        <div class="repo-readme-badges"></div>
+      </div>
+      <div class="repo-card-side">
+        <a class="repo-release-link hidden" target="_blank" rel="noreferrer"></a>
+        <div class="repo-logo-slot hidden"></div>
+      </div>
+    </div>
+    <div class="repo-meta"></div>
+    <div class="repo-footer">
+      <div class="repo-topics"></div>
+    </div>
+  </article>
+</template>
+
+<script type="module" src="assets/app.js"></script>
 </body>
 </html>

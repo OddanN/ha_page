@@ -1,0 +1,48 @@
+{
+  "site": {
+    "title": "OdaN's Projects for Home Assistant",
+    "description": "Витрина репозиториев OddanN по теме Home Assistant и связанных интеграций. Список обновляется автоматически через GitHub Actions.",
+    "acknowledgements": "Спасибо всем, кто тестирует интеграции, присылает багрепорты, предлагает идеи и помогает доводить проекты до рабочего состояния.",
+    "special_thanks": [
+      {
+        "label": "@fuCtor",
+        "url": "https://github.com/fuCtor"
+      },
+      {
+        "label": "@Pamell",
+        "url": "https://github.com/Pamell"
+      }
+    ],
+    "github_username": "OddanN",
+    "github_profile_url": "https://github.com/OddanN",
+    "source_repository": "OddanN/ha_page",
+    "source_repository_url": "https://github.com/OddanN/ha_page"
+  },
+  "collection": {
+    "summary": "Workflow по расписанию получает список публичных репозиториев через GitHub API, применяет фильтры из этого файла и публикует обновлённую страницу.",
+    "exclude_repositories": [
+      "ha_page"
+    ],
+    "featured_repositories": [
+    ],
+    "include_repositories": [],
+    "include_topics": [
+      "home-assistant",
+      "hacs",
+      "homeassistant"
+    ],
+    "name_prefixes": [
+      "ha_",
+      "hass_"
+    ],
+    "text_keywords": [
+      "home assistant",
+      "hacs",
+      "lovelace",
+      "eirc"
+    ],
+    "exclude_archived": true,
+    "exclude_forks": false,
+    "max_repositories": 48
+  }
+}
