@@ -306,7 +306,7 @@ h2 {
 
 .repo-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.8rem;
 }
 
@@ -574,6 +574,10 @@ a.acknowledgement-name {
         justify-content: flex-start;
         justify-self: auto;
         margin-top: 0.75rem;
+    }
+
+    .repo-grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .repo-card-head {
