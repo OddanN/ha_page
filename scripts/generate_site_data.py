@@ -206,6 +206,28 @@ def normalize(text: str | None) -> str:
     return (text or "").strip().lower()
 
 
+def format_repository_name(name: str | None) -> str:
+    """Convert a repository slug into a readable title."""
+    raw_name = (name or "").strip()
+    if not raw_name:
+        return ""
+
+    replacements = {
+        "home assistant": "Home Assistant",
+        "hacs": "HACS",
+    }
+    lowered = raw_name.lower()
+    for suffix, replacement in replacements.items():
+        slug_suffix = suffix.replace(" ", "_")
+        if lowered.endswith(f"_for_{slug_suffix}"):
+            base = raw_name[: -len(f"_for_{slug_suffix}")]
+            words = [part.upper() if len(part) <= 4 else part.capitalize() for part in re.split(r"[_-]+", base) if part]
+            return f"{' '.join(words)} for {replacement}"
+
+    words = [part.upper() if len(part) <= 4 else part.capitalize() for part in re.split(r"[_-]+", raw_name) if part]
+    return " ".join(words)
+
+
 def repo_matches(repo: dict[str, Any], collection: dict[str, Any]) -> bool:
     """Check whether a repository matches the configured filters."""
     name = normalize(repo.get("name"))
@@ -258,6 +280,7 @@ def filter_repositories(repositories: list[dict[str, Any]], collection: dict[str
         filtered.append(
             {
                 "name": repo.get("name"),
+                "display_name": format_repository_name(repo.get("name")),
                 "description": repo.get("description"),
                 "html_url": repo.get("html_url"),
                 "updated_at": repo.get("updated_at"),

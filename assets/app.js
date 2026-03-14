@@ -178,7 +178,7 @@ function createRepoCard(repo) {
   } else {
     badgesNode.remove();
   }
-  nameNode.textContent = repo.name;
+  nameNode.textContent = repo.display_name || formatRepositoryName(repo.name);
   nameNode.href = repo.html_url;
   renderReadmeBadges(readmeBadgesNode, repo.readme_badges || []);
   descriptionNode.textContent = repo.description || "Описание не заполнено.";
@@ -236,7 +236,7 @@ function createRepoCard(repo) {
     const logoNode = document.createElement("img");
     logoNode.className = "repo-logo";
     logoNode.src = repo.logo_url;
-    logoNode.alt = `${repo.name} logo`;
+    logoNode.alt = `${repo.display_name || formatRepositoryName(repo.name)} logo`;
     logoSlotNode.replaceChildren(logoNode);
     logoSlotNode.classList.remove("hidden");
   }
@@ -286,6 +286,35 @@ function formatDate(value) {
   }
 
   return dateFormatter.format(new Date(value));
+}
+
+function formatRepositoryName(name) {
+  const rawName = (name || "").trim();
+  if (!rawName) {
+    return "";
+  }
+
+  const replacements = {
+    home_assistant: "Home Assistant",
+    hacs: "HACS",
+  };
+
+  for (const [suffix, replacement] of Object.entries(replacements)) {
+    const marker = `_for_${suffix}`;
+    if (rawName.toLowerCase().endsWith(marker)) {
+      return `${formatRepositoryWords(rawName.slice(0, -marker.length))} for ${replacement}`;
+    }
+  }
+
+  return formatRepositoryWords(rawName);
+}
+
+function formatRepositoryWords(value) {
+  return value
+    .split(/[_-]+/)
+    .filter(Boolean)
+    .map((part) => (part.length <= 4 ? part.toUpperCase() : part[0].toUpperCase() + part.slice(1)))
+    .join(" ");
 }
 
 function renderError(error) {
