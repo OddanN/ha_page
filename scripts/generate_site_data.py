@@ -106,12 +106,18 @@ def fetch_release(owner: str, repo_name: str, headers: dict[str, str]) -> dict[s
 
 
 def fetch_logo(owner: str, repo_name: str, headers: dict[str, str]) -> str | None:
-    """Return the download URL for logo.png in the repository root, if it exists."""
-    payload = api_get_optional_json(f"{API_ROOT}/repos/{owner}/{repo_name}/contents/logo.png", headers)
-    if not payload:
-        return None
+    """Return the download URL for the preferred repository logo, if it exists."""
+    candidate_paths = [
+        f"custom_components/{repo_name}/brand/icon.png",
+        "logo.png",
+    ]
 
-    return payload.get("download_url")
+    for path in candidate_paths:
+        payload = api_get_optional_json(f"{API_ROOT}/repos/{owner}/{repo_name}/contents/{path}", headers)
+        if payload:
+            return payload.get("download_url")
+
+    return None
 
 
 def fetch_readme_badges(owner: str, repo_name: str, headers: dict[str, str]) -> list[dict[str, str]]:
