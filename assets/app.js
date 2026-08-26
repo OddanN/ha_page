@@ -140,7 +140,6 @@ function createRepoCard(repo) {
   const readmeBadgesNode = fragment.querySelector(".repo-readme-badges");
   const descriptionNode = fragment.querySelector(".repo-description");
   const metaNode = fragment.querySelector(".repo-meta");
-  const topicsNode = fragment.querySelector(".repo-topics");
   const releaseLinkNode = fragment.querySelector(".repo-release-link");
   const logoSlotNode = fragment.querySelector(".repo-logo-slot");
 
@@ -205,13 +204,6 @@ function createRepoCard(repo) {
     valueNode.textContent = value;
     item.append(labelNode, valueNode);
     metaNode.append(item);
-  });
-
-  (repo.topics || []).slice(0, 5).forEach((topic) => {
-    const pill = document.createElement("span");
-    pill.className = "topic-pill";
-    pill.textContent = topic;
-    topicsNode.append(pill);
   });
 
   if (repo.logo_url) {
