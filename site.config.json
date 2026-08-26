@@ -21,7 +21,8 @@
   "collection": {
     "summary": "Workflow по расписанию получает список публичных репозиториев через GitHub API, применяет фильтры из этого файла и публикует обновлённую страницу.",
     "exclude_repositories": [
-      "ha_page"
+      "ha_page",
+      "hasc_default"
     ],
     "featured_repositories": [
     ],
