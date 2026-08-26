@@ -4,7 +4,6 @@ const titleNode = document.querySelector("#site-title");
 const descriptionNode = document.querySelector("#site-description");
 const profileLinkNode = document.querySelector("#profile-link");
 const sourceLinkNode = document.querySelector("#source-link");
-const chipsNode = document.querySelector("#filter-chips");
 const featuredSectionNode = document.querySelector("#featured-section");
 const featuredStatCardNode = document.querySelector("#featured-stat-card");
 const featuredGridNode = document.querySelector("#featured-grid");
@@ -38,7 +37,7 @@ async function main() {
 }
 
 function renderSite(payload) {
-  const { site = {}, collection = {}, generated_at: generatedAt, repos = [] } = payload;
+  const { site = {}, generated_at: generatedAt, repos = [] } = payload;
   const featuredRepos = repos.filter((repo) => repo.featured);
   const regularRepos = repos.filter((repo) => !repo.featured);
 
@@ -62,7 +61,6 @@ function renderSite(payload) {
   featuredNode.textContent = numberFormatter.format(featuredRepos.length);
   updatedNode.textContent = generatedAt ? dateFormatter.format(new Date(generatedAt)) : "нет данных";
 
-  renderChips(collection.filters || []);
   featuredStatCardNode.classList.toggle("hidden", featuredRepos.length === 0);
   featuredSectionNode.classList.toggle("hidden", featuredRepos.length === 0);
   renderRepoList(featuredGridNode, featuredRepos, "Избранные репозитории пока не выбраны.");
@@ -91,22 +89,6 @@ function renderDescription(site) {
   linkNode.rel = "noreferrer";
   linkNode.textContent = linkLabel;
   descriptionNode.append(linkNode);
-}
-
-function renderChips(filters) {
-  chipsNode.replaceChildren();
-
-  if (!filters.length) {
-    chipsNode.append(createTextNode("Фильтры не настроены"));
-    return;
-  }
-
-  filters.forEach((filterLabel) => {
-    const chip = document.createElement("span");
-    chip.className = "chip";
-    chip.textContent = filterLabel;
-    chipsNode.append(chip);
-  });
 }
 
 function renderRepoList(targetNode, repos, emptyMessage) {
@@ -319,7 +301,6 @@ function formatRepositoryWords(value) {
 
 function renderError(error) {
   const message = `Не удалось загрузить данные: ${error.message}`;
-  renderChips([]);
   renderRepoList(featuredGridNode, [], message);
   renderRepoList(repoGridNode, [], "После первого запуска GitHub Actions здесь появится каталог репозиториев.");
 }

@@ -279,18 +279,12 @@ h2 {
     margin-bottom: 0.8rem;
 }
 
-.chips,
 .repo-topics {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
 }
 
-.chips {
-    margin-bottom: 0.8rem;
-}
-
-.chip,
 .topic-pill {
     display: inline-flex;
     align-items: center;
