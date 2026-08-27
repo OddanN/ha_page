@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "site.config.json"
 OUTPUT_PATH = ROOT / "data" / "site.generated.json"
 API_ROOT = "https://api.github.com"
+README_BADGE_SCAN_LINES = 60
 README_BADGE_LINK_RE = re.compile(
     r"\[!\[(?P<alt>[^]]*)]\((?P<image>[^)]+)\)]\((?P<link>[^)]+)\)"
 )
@@ -131,7 +132,7 @@ def fetch_readme_badges(owner: str, repo_name: str, headers: dict[str, str]) -> 
     except (KeyError, ValueError):
         return []
 
-    snippet = "\n".join(content.splitlines()[:30])
+    snippet = "\n".join(content.splitlines()[:README_BADGE_SCAN_LINES])
     badges: list[dict[str, str]] = []
     used_images: set[str] = set()
 
@@ -161,7 +162,7 @@ def fetch_readme_badges(owner: str, repo_name: str, headers: dict[str, str]) -> 
             }
         )
 
-    return badges[:4]
+    return badges
 
 
 def should_ignore_badge(badge: dict[str, str]) -> bool:
@@ -173,13 +174,12 @@ def should_ignore_badge(badge: dict[str, str]) -> bool:
             "my.home-assistant.io" in image_url
             or "my.home-assistant.io" in link_url
             or "open your home assistant instance" in alt
+            or "github/commit-activity" in image_url
     )
 
 
 def extract_release_badge(
         badges: list[dict[str, str]],
-        owner: str,
-        repo_name: str,
 ) -> tuple[dict[str, str] | None, list[dict[str, str]]]:
     """Split README badges into a dedicated release badge and the remaining badges."""
     release_badge: dict[str, str] | None = None
@@ -191,16 +191,9 @@ def extract_release_badge(
 
         image_url = badge.get("image_url", "").lower()
         alt = badge.get("alt", "").lower()
-        link_url = badge.get("link_url", "")
         if release_badge is None and ("github/v/release" in image_url or alt == "github release"):
             release_badge = badge
             continue
-
-        if "github/commit-activity" in image_url and not link_url:
-            badge = {
-                **badge,
-                "link_url": f"https://github.com/{owner}/{repo_name}/commits/main/",
-            }
 
         filtered.append(badge)
 
@@ -282,7 +275,7 @@ def filter_repositories(repositories: list[dict[str, Any]], collection: dict[str
 
         owner = repo.get("owner", {}).get("login")
         readme_badges = fetch_readme_badges(owner, repo.get("name"), headers) if owner else []
-        release_badge, readme_badges = extract_release_badge(readme_badges, owner, repo.get("name"))
+        release_badge, readme_badges = extract_release_badge(readme_badges)
         filtered.append(
             {
                 "name": repo.get("name"),
