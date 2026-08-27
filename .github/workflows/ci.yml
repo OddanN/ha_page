@@ -12,6 +12,11 @@ on:
         description: Custom workflow run name
         required: false
         type: string
+      prepared_pages_build:
+        description: Internal flag for a prepared pages-build commit
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "17 */6 * * *"
     - cron: "31 4 1 * *"
@@ -25,7 +30,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.prepared_pages_build && github.ref || (github.event_name == 'push' && github.ref || 'pages-refresh') }}
   cancel-in-progress: true
 
 jobs:
@@ -56,15 +61,82 @@ jobs:
           name: pylint-report
           path: pylint-report.txt
 
+  trigger-pages-refresh:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && !inputs.prepared_pages_build) ||
+      github.event_name == 'release' ||
+      (github.event_name == 'schedule' && github.event.schedule == '17 */6 * * *')
+    needs: pylint
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - name: Check out default branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+
+      - name: Create a unique Pages build version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_REF: ${{ github.event_name == 'release' && format('refs/tags/{0}', github.event.release.tag_name) || github.ref }}
+          SOURCE_SHA: ${{ github.sha }}
+          REFRESH_REASON: ${{ inputs.run_name || format('{0} from {1}', github.event_name, github.ref_name) }}
+        shell: bash
+        run: |
+          {
+            echo "timestamp=$(date --utc --iso-8601=seconds)"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_attempt=${GITHUB_RUN_ATTEMPT}"
+            echo "source_ref=${SOURCE_REF}"
+            echo "source_sha=${SOURCE_SHA}"
+            echo "reason=${REFRESH_REASON}"
+          } > .pages-build-version
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .pages-build-version
+          git commit -m "chore: prepare GitHub Pages build ${GITHUB_RUN_ID}"
+          git push --force origin HEAD:pages-build
+
+          gh workflow run ci.yml \
+            --ref pages-build \
+            -f "run_name=${REFRESH_REASON}" \
+            -f prepared_pages_build=true
+
   build:
     if: >-
-      github.event_name != 'pull_request' &&
-      (github.event_name != 'schedule' || github.event.schedule == '17 */6 * * *')
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.prepared_pages_build)
     needs: pylint
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+
+      - name: Resolve site source ref
+        id: source
+        shell: bash
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "pages-build" ]; then
+            SOURCE_REF="$(sed -n 's/^source_ref=//p' .pages-build-version)"
+            if [[ ! "${SOURCE_REF}" =~ ^refs/(heads|tags)/[-A-Za-z0-9._/]+$ ]]; then
+              echo "Invalid source_ref in .pages-build-version: ${SOURCE_REF}" >&2
+              exit 1
+            fi
+          else
+            SOURCE_REF="${GITHUB_SHA}"
+          fi
+
+          echo "ref=${SOURCE_REF}" >> "${GITHUB_OUTPUT}"
+          echo "Building site source from ${SOURCE_REF}"
+
+      - name: Check out site source
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.source.outputs.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
