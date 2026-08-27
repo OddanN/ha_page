@@ -387,6 +387,7 @@ h2 {
 .repo-meta {
     display: flex;
     flex-wrap: wrap;
+    align-self: end;
     gap: 0.45rem;
 }
 
